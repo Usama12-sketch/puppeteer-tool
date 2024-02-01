@@ -1,0 +1,17 @@
+{
+  "name": "repriser",
+  "version": "1.0.0",
+  "description": "reprising tool for amazon",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.0.3",
+    "puppeteer": "^21.10.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  }
+}
