@@ -84,11 +84,29 @@ async function run() {
       
       const Element = await page.$(".css-1nvyvo0");
       const chance2 = await page.$(".css-1yl6fbm");
-      const SecElement = await page.$(".css-dpcpx8");
       
       const title  = await page.title()
-      
-      if (Element) {
+
+
+      const htmlContent = await page.evaluate(() => document.getElementsByTagName("section")[2].innerHTML);
+
+      if (htmlContent){
+
+        // Apply the code snippet to the HTML content
+        const firstIndex = htmlContent.indexOf("$");
+        let lastIndex = htmlContent.indexOf('"', firstIndex);
+        
+        
+        if (lastIndex - firstIndex > 7) {
+           lastIndex = htmlContent.indexOf('<', firstIndex);
+        }
+    
+        const extractedSubstring = htmlContent.substring(firstIndex, lastIndex);
+          dataObject = { text: title, price: extractedSubstring, url: url }
+    
+          console.log(`title: ${title}  han bhai mn hoon sab ka baap: ${extractedSubstring}`);
+      }
+      else if (Element) {
           await page.screenshot({path: `Saboot/ss${url.length * Math.random()}.png`})
           const ariaLabel = await Element.evaluate(el => el.textContent);
     
@@ -107,32 +125,14 @@ async function run() {
             console.log(`URL: ${title}  chance2: ${ariaLabel}`);
           }   
           
-           if(SecElement){
+         else  if(Value1){
             const Value1 = await page.$(".css-1qfcjyj");
           
-          const Value2 = await page.$('body');
           
           await page.screenshot({path: `Saboot/ss${url.length * Math.random()}.png`})
           const firstText = await Value1.evaluate(el => el.textContent);
           const title  = await page.title()
-          if(Value2){
-
-            // document.body.innerHTML.substring(document.body.innerHTML.indexOf("price-part") +25 ,document.body.innerHTML.indexOf("price-part") + 40)           
-            const SecText = await Value2.evaluate(async(el) => {
-                  const firstIndex = await  el.innerHTML.indexOf("price-part") + 25
-                 const lastIndex = await  el.innerHTML.indexOf('"', firstIndex)
-              el.innerHTML.substring( firstIndex , firstIndex + 31)
-             
-            }
-            
-            );
-            // const convertedNumber = parseInt(SecText, 10); // Using parseInt with base 10
-
-            
-            dataObject = { text: title, price: SecText , url: url  }
-            // console.log(`URL: ${title}  SubString: ${SecText} innerHTML: ${SecText}` );
-            console.log(SecText + "han bhai");
-          }  else {
+        
             
             console.log(`URL: ${title}  seprated: ${firstText}.Error`);
             
@@ -140,10 +140,7 @@ async function run() {
             
           }
           
-          
-          
-        }
-        
+      
         else {
           
           // await page.goto(url);
@@ -153,6 +150,9 @@ async function run() {
           dataObject = { text: title, price: ".Error", url: url }
           console.log(`URL: ${title}, Element with class 'css-111drvy' not found`);
         }
+
+
+
         // await page.close();
         data.push(dataObject)
         new Promise(resolve => {
